@@ -1,12 +1,23 @@
-# React + Vite
+# React Checkbox Issue
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repo demonstrates how React maintains references to `input` elements which have been detached from the DOM, preventing them from being garbage collected.
 
-Currently, two official plugins are available:
+Steps to reproduce:
+```
+git clone git@github.com:frankwallis/react-checkbox-issue.git
+cd react-checkbox-issue
+npm i
+npm run dev
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Open browser at http://localhost:5173/
+- Disable React Dev Tools
+- Observe reference counts in the console
+- Click "Next" button
+- Force a garbage collection from the "Memory" tab of Chrome Dev Tools
+- Observe the reference counts in the console
 
-## Expanding the ESLint configuration
+Expected: Both `input` and `div` have no references
+Actual: `div` has no references, but `input` has one reference
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+By taking a heap snapshot in the memory tab it can be seen that the detached `input` is being referenced from React DOM `trackValueOnNode` function.
