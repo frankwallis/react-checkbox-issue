@@ -17,8 +17,8 @@ npm run dev
 - Force a garbage collection from the "Memory" tab of Chrome Dev Tools
 - Observe the reference counts in the console
 
-Expected: Both `input` and `div` have no references
+**Expected:** Both `input` and `div` have no references.
 
-Actual: `div` has no references, but `input` has one reference
+**Actual:** `div` has no references, but `input` has one reference.
 
 By taking a heap snapshot in the memory tab it can be seen that the detached `input` is being referenced from React DOM `trackValueOnNode` function.
